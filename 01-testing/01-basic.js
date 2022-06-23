@@ -1,4 +1,4 @@
-import * as THREE from '../three.js-master/build/three.module.js'
+import * as THREE from '../threejs-master/build/three.module.js'
 
 class App {
     constructor() {
@@ -25,6 +25,7 @@ class App {
         requestAnimationFrame(this.render.bind(this));
     }
 
+
     _setupCamera() {
         const width = this._divContainer.clientWidth;
         const height = this._divContainer.clientHeight;
@@ -47,13 +48,19 @@ class App {
     }
 
     _setupModel() {
-        const geometry = new THREE.BoxGeometry(1, 1, 1);
-        const mererial = new THREE.MeshPhongMaterial({color: 0x44a88});
+        const geometry = new THREE.BoxGeometry(1, 1, 1,);
+        const fillMaterial = new THREE.MeshPhongMaterial({color:0x515151});
+        const cube = new THREE.Mesh(geometry, fillMaterial);
 
-        const cube = new THREE.Mesh(geometry, mererial);
+        const lineMaterial = new THREE.LineBasicMaterial({color:0xffff00});
+        const line = new THREE.LineSegments(new THREE.WireframeGeometry(geometry), lineMaterial);
 
-        this._scene.add(cube);
-        this._cube = cube;
+        const group = new THREE.Group();
+       // group.add(cube);
+        group.add(line);
+
+        this._scene.add(group);
+        this._cube = group;
     }
 
     resize() {
@@ -74,8 +81,8 @@ class App {
 
     update(time) {
         time *= 0.001;
-        this._cube.rotation.x = time;
-        this._cube.rotation.y = time;
+        // this._cube.rotation.x = time;
+        // this._cube.rotation.y = time;
     }
 }
 

@@ -29,6 +29,7 @@ class App {
     }
 
     _setpuControls() {
+        //카메라 컨트롤
         new OrbitControls(this._camera, this._divContainer);
     }
 
@@ -41,6 +42,8 @@ class App {
             0.1,
             100
         );
+        
+        camera.position.x = 15;
         camera.position.z = 15;
         this._camera = camera;
     }
@@ -128,27 +131,27 @@ class App {
     //     this._scene.add(group);
     //     this._cube = group;
     // }
-    _setupModel() {
-        const points = [];
-        for (let i = 0; i < 10; i++) {
-            points.push(new THREE.Vector2(Math.sin(i * 0.2) * 3 + 3, (i - 5) * .8));
-        }
+    // _setupModel() {
+    //     const points = [];
+    //     for (let i = 0; i < 10; i++) {
+    //         points.push(new THREE.Vector2(Math.sin(i * 0.2) * 3 + 3, (i - 5) * .8));
+    //     }
 
-        const geometry = new THREE.LatheGeometry(points);
+    //     const geometry = new THREE.LatheGeometry(points);
         
-        const fillMaterial = new THREE.MeshPhongMaterial({color: 0x515151});
-        const cube = new THREE.Mesh(geometry, fillMaterial);
+    //     const fillMaterial = new THREE.MeshPhongMaterial({color: 0x515151});
+    //     const cube = new THREE.Mesh(geometry, fillMaterial);
 
-        const lineMaterial = new LineBasicMaterial({color: 0x515151});
-        const line = new THREE.LineSegments(new THREE.WireframeGeometry(geometry), lineMaterial);
+    //     const lineMaterial = new LineBasicMaterial({color: 0x515151});
+    //     const line = new THREE.LineSegments(new THREE.WireframeGeometry(geometry), lineMaterial);
 
-        const group = new THREE.Group();
-        group.add(cube);
-        group.add(line);
+    //     const group = new THREE.Group();
+    //     group.add(cube);
+    //     group.add(line);
 
-        this._scene.add(group);
-        this._cube = group;
-    }
+    //     this._scene.add(group);
+    //     this._cube = group;
+    // }
 
     // _setupModel() {
     //     const shape = new THREE.Shape();
@@ -161,9 +164,16 @@ class App {
     //     shape.bezierCurveTo(x+8,y+3.5,x+8,y,x+5,y)
     //     shape.bezierCurveTo(x+3.5,y,x+2.5,y+2.5,x+2.5,y+2.5);
 
+    //     const settings = {
+    //         steps: 2,
+    //         depth: 6,
+    //         bevelEnabled: true,
+    //         bevelThickness: 0.1,
+    //         bevelSize: 1.5,
+    //         bevelSegments:4,
+    //     };
 
-
-    //     const geometry = new THREE.ShapeGeometry(shape);
+    //     const geometry = new THREE.ExtrudeGeometry(shape, settings);
     //     const fillMaterial = new THREE.MeshPhongMaterial({color:0x515151});
     //     const cube = new THREE.Mesh(geometry, fillMaterial);
 
@@ -177,6 +187,44 @@ class App {
     //     this._scene.add(group);
     //     this._cube = group;
     // }
+    //font 지오메트리
+    _setupModel() {
+        const fontLoader = new THREE.FontLoader();
+        async function loadFont(that) {
+            const url="https://unpkg.com/three@0.138.0/examples/fonts/helvetiker_regular.typeface.json";
+            const font = await new Promise((resolve, reject) => {
+                fontLoader.load(url, resolve, undefined, reject);
+            });
+
+            const geometry = new THREE.TextGeometry("GIS",{
+                font:font,
+                size:5,
+                height:1.5,
+                curveSegments:4,
+                bevelEnabled:true,
+                bevelThickness:0.7,
+                bevelSize: .7,
+                bevelSegment:2
+            });
+
+            const fillMaterial = new THREE.MeshPhongMaterial({color:0x515151});
+            const cube = new THREE.Mesh(geometry, fillMaterial);
+
+            const lineMaterial = new THREE.LineBasicMaterial({color:0xffff00});
+            const line = new THREE.LineSegments(new THREE.WireframeGeometry(geometry), lineMaterial);
+
+            const group = new THREE.Group();
+            group.add(cube);
+            group.add(line);
+
+            that._scene.add(group);
+            that._cube = group;
+        };
+        loadFont(this);
+
+
+        
+    }
 
     resize() {
         const width = this._divContainer.clientWidth;

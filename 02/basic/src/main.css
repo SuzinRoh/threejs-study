@@ -1,0 +1,10 @@
+body {
+    margin : 0;
+    /* background-color: antiquewhite; */
+}
+
+#three-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
